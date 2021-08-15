@@ -1,0 +1,16 @@
+#!/bin/sh
+# Outputs all songs in mpc which are in no playlist
+
+all_songs=$(mpc --format "%artist%\t\t%title%" listall)
+all_playlist_names=$(mpc lsplaylists)
+
+while IFS= read -r playlist_name
+do
+	songs_of_current_playlist=$(mpc --format "%artist%\t\t%title%" playlist "$playlist_name")
+	all_songs_in_playlists=$(printf '%s\n%s' "$all_songs_in_playlists" "${songs_of_current_playlist}")
+done << EOF
+$all_playlist_names
+EOF
+
+songs_without_playlist=$(echo "$all_songs" | grep -Fxv "$all_songs_in_playlists")
+printf '%s\n' "$songs_without_playlist"

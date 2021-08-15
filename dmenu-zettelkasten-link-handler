@@ -1,0 +1,53 @@
+#!/bin/sh
+# Makes it possible to search the string inputted through the standard input for zettelkasten note
+# links and open them or copy them to the clipboard
+
+linkregex="\[\[[a-zA-Z0-9]*\]\]"
+links="$(tr -d '\n' |						# First remove linebreaks
+	grep -aEo "$linkregex" |				# grep only links as defined above
+	tr -d '[' |
+	tr -d ']' |
+	uniq)"
+
+[ -z "$links" ] && exit 1
+
+while IFS= read -r note_id
+do
+	note_name=$(brn --dir $ZETTELKASTEN_DIR get-name $note_id)
+
+	if [ -z "$dmenu_entries" ]
+	then
+		dmenu_entries="${note_id} - ${note_name}"
+	else
+		dmenu_entries="${dmenu_entries}\n${note_id} - ${note_name}"
+	fi
+done <<EOF
+$links
+EOF
+
+while getopts "hoc" o
+do
+	case "${o}" in
+		h)
+			printf "ARGUMENTS:\\n\t-o: open (default)\\n\\t-c: copy\\n\\t-h: Show this message\\n" && exit 1
+			;;
+		o)
+			chosen="$(echo "$dmenu_entries" |
+				dmenu -i -p "Open note:" -l 10)"
+
+			chosen_note_id=$(echo "$chosen" |
+				awk '{print $1}')
+			$TERMINAL -e brn --dir $ZETTELKASTEN_DIR open "$chosen_note_id"
+			;;
+		c)
+			echo "$dmenu_entries" |
+				dmenu -i -p "Copy:" -l 10 |
+				awk '{print $1}' |
+				tr -d '\n' |
+				xclip -selection clipboard
+			;;
+		*)
+			printf "Invalid option -$s\\nTry '-h' for more information.\n" "$OPTARG" && exit 1
+			;;
+	esac
+done

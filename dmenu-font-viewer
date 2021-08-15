@@ -1,0 +1,8 @@
+#!/bin/sh
+# Dmenu script for viewing fonts
+
+selected_font_uri=$(fc-list| awk '{print $1}' | sed 's/://g' | dmenu -l 20 -p 'Fonts: ')
+
+if [ ! $selected_font_uri = "" ]; then
+	display $selected_font_uri
+fi

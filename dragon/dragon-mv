@@ -1,0 +1,12 @@
+#!/bin/sh
+# Provides the ability to drop a file in an appearing window
+# to move it to the current directory
+
+files=$(dragon-drag-and-drop --target --and-exit)
+
+for file in $files
+do
+  path=${file#file://}
+  name=$(basename "$path")
+  mv "$path" "$(pwd)/$name"
+done

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+while getopts "hmd" o
+do
+	case "${o}" in
+		h) printf "ARGUMENTS:\\n\t-m: search for songs with no playlist\\n\\t-p: search for duplicates in playlists\\n\\t-h: Show this message\\n" ;;
+		m) exec mpc-playlist-missing-search ;;
+		d) exec mpc-playlist-duplicate-search ;;
+	esac
+done

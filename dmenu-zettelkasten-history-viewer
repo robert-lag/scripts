@@ -1,0 +1,41 @@
+#!/bin/sh
+# Shows the note history of the zettelkasten and makes it possible for the user to choose an item to open or copy to the clipboard
+
+dmenu_entries=$(brn --dir $ZETTELKASTEN_DIR history | awk 'OFS=" - " { print $1,$2 }')
+
+while getopts "hocl" o
+do
+	case "${o}" in
+		h)
+			printf "ARGUMENTS:\\n\t-o: open (default)\\n\\t-c: copy\\n\\t-h: Show this message\\n" && exit 1
+			;;
+		o)
+			chosen="$(echo "$dmenu_entries" |
+				dmenu -i -p "Note history:" -l 10)"
+
+			chosen_note_id=$(echo "$chosen" |
+				awk '{print $1}')
+			$TERMINAL -e brn --dir $ZETTELKASTEN_DIR open "$chosen_note_id"
+			;;
+		c)
+			echo "$dmenu_entries" |
+				dmenu -i -p "Copy note ID from history:" -l 10 |
+				awk '{print $1}' |
+				tr -d '\n' |
+				xclip -selection clipboard
+			;;
+		l)
+			chosen_note_id=$(echo "$dmenu_entries" |
+				dmenu -i -p "Copy note ID from history:" -l 10 |
+				awk '{print $1}' |
+				tr -d '\n')
+
+			note_link="[[${chosen_note_id}]]"
+
+			echo "$note_link" | xclip -selection clipboard
+			;;
+		*)
+			printf "Invalid option -$s\\nTry '-h' for more information.\n" "$OPTARG" && exit 1
+			;;
+	esac
+done

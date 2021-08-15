@@ -1,0 +1,7 @@
+#!/bin/sh
+
+current_song=$(mpc current --format "%title%")
+artist=$(mpc current --format "%artist%")
+album=$(mpc current --format "%album%")
+
+notify-send -u normal -t 4000 -- "$current_song" "by <i>$artist</i>\nfrom $album"

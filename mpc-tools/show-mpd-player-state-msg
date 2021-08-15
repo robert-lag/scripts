@@ -1,0 +1,20 @@
+#!/bin/sh
+
+current_song=$(mpc current --format "%title%")
+artist=$(mpc current --format "%artist%")
+album=$(mpc current --format "%album%")
+
+
+case $MPD_PLAYER_STATE in
+	unknown) state="S" ;;
+	play) state="" ;;
+	pause) state="PAUSED " ;;
+	stop) state="STOPPED " ;;
+	*) state="State: $MPD_PLAYER_STATE " ;;
+esac
+
+if [ ! "$current_song" = "" ]; then
+	notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>\nfrom $album"
+elif [ ! "$state" = "" ]; then
+	notify-send -u normal -t 4000 -- "MPD $state"
+fi
