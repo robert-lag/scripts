@@ -1,0 +1,14 @@
+#!/bin/sh
+# Downloads the audio track of a youtube video using youtube-dl
+# and normalizes its file name (replaces special characters, etc.).
+
+youtube-dl --add-metadata --ignore-errors --extract-audio \
+	--output '___---%(title)s.%(ext)s' \
+	--restrict-filenames \
+	-- "$1"
+
+created_file=$(ls | grep '^___---.*$')
+new_file_name=$(echo "$created_file" | cut -c7-)
+mv "$created_file" "$new_file_name"
+normalize-file-name "$new_file_name"
+

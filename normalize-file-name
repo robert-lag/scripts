@@ -12,6 +12,7 @@ echo "Original:\t$input_file"
 
 normalized_file=$(echo $input_file |
 	sed "s/'//g" |
+	sed 's/_/-/g' |
 	sed 's/\- /-/g' |
 	sed 's/ \-/-/g' |
 	tr ' ' '-' |
@@ -19,8 +20,8 @@ normalized_file=$(echo $input_file |
 
 echo "Normalized:\t$normalized_file"
 
-if [ "$input_file" = $normalized_file ]; then
+if [ "$input_file" = "$normalized_file" ]; then
 	echo "The original file is the same as the normalized file (skipping)"
 else
-	mv "$input_file" $normalized_file
+	mv "$input_file" "$normalized_file"
 fi
