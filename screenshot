@@ -1,0 +1,12 @@
+#!/bin/sh
+# Lets the user select a region or window, makes a screenshot of it
+# and saves it in the folder specified by the $SCRNSHOT_DIR environment
+# variable.
+
+scrnshot_dir=$(echo $SCRNSHOT_DIR | sed "s/\/$//g")
+date_time_stamp=$(date +%Y-%m-%d-%H%M%S)
+
+maim --select ${scrnshot_dir}/${date_time_stamp}.png &&
+	notify-send -u normal -t 2000 \
+		-i "${scrnshot_dir}/${date_time_stamp}.png" \
+		"Screenshot taken" "Saved in ${scrnshot_dir}"
