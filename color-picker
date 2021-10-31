@@ -1,0 +1,21 @@
+#!/bin/sh
+# Lets the user select a region and copies the average color value
+# (in hexadecimal format) to the clipboard.
+
+temp_file_location="/tmp/$(date +%s).png"
+
+# Select region and ...
+maim --select --tolerance=0 |
+	# Create a temporary file with size 1x1 containing the average color of the region
+	convert - -resize 1x1\! $temp_file_location &&
+	# Print the color of the file to stdout
+	convert $temp_file_location -format '%[hex:p{0,0}]' info:- |
+	# Copy the hex value to the clipboard
+	xclip -selection clipboard &&
+	# Make the file bigger to be able to display it
+	convert $temp_file_location -resize 100x100\! $temp_file_location &&
+	# Notify the user about which color was selected
+	notify-send -u normal -t 2000 \
+		-i $temp_file_location \
+		"Copied Color Hex" \
+		"#$(xclip -selection clipboard -out)"
