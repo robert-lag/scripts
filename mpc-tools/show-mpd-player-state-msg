@@ -14,7 +14,11 @@ case $MPD_PLAYER_STATE in
 esac
 
 if [ ! "$current_song" = "" ]; then
-	notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>\nfrom $album"
+	if [ -z "$album" ]; then
+		notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>"
+	else
+		notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>\nfrom $album"
+	fi
 elif [ ! "$state" = "" ]; then
 	notify-send -u normal -t 4000 -- "MPD $state"
 fi
