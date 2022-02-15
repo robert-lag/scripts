@@ -1,6 +1,7 @@
 #!/bin/sh
-# Makes it possible to search the string inputted through the standard input for zettelkasten note
-# links and open them or copy them to the clipboard
+# Makes it possible to search the string inputted through the
+# standard input for zettelkasten note links and open them or
+# copy them to the clipboard
 
 linkregex="\[\[[a-zA-Z0-9]*\]\]"
 links="$(tr -d '\n' |						# First remove linebreaks
