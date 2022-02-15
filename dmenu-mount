@@ -63,7 +63,9 @@ do
 				grep 'IdLabel' |
 				awk -F '[[:space:]][[:space:]]+' '{print $3}')"
 			;;
+	esac
 done
+
 android_drives=$(simple-mtpfs -l 2>/dev/null)
 
 if [ -z "$usb_drives" ]; then
