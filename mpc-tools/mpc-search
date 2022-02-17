@@ -13,11 +13,22 @@ done
 if [ $OPTIND -eq 1 ]; then
 	# No options were passed to the script
 
-	echo "Songs, which are in no playlist:"
-	echo "================================"
-	mpc-playlist-missing-search
+	missing_search_result=$(mpc-playlist-missing-search)
+	if [ -n "$missing_search_result" ]; then
+		echo "Songs, which are in no playlist:"
+		echo "================================"
+		mpc-playlist-missing-search
+	fi
 
-	echo "Songs, which are multiple times in the same playlist:"
-	echo "====================================================="
-	mpc-playlist-duplicate-search
+	duplicate_search_result=$(mpc-playlist-duplicate-search)
+
+	if [ -n "$duplicate_search_result" ]; then
+		if [ -n "$missing_search_result" ]; then
+			echo "\n"
+		fi
+
+		echo "Songs, which are multiple times in the same playlist:"
+		echo "====================================================="
+		mpc-playlist-duplicate-search
+	fi
 fi
