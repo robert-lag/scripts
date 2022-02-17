@@ -1,12 +1,15 @@
 #!/bin/sh
+# Outputs all songs that are in no playlist or are multiple times in the
+# same playlist. By using either the -m or -d flag you can specify that
+# only one of these 2 searches are done
 
 while getopts "hmd" o
 do
 	case "${o}" in
-		h) printf "OPTIONS:\\n\t-m: search only for songs with no playlist\\n\\t-p: search for duplicates in playlists\\n\\t-h: Show this message\\n" ;;
+		h) printf "OPTIONS:\\n\t-m: search only for songs with no playlist\\n\\t-d: search for duplicates in playlists\\n\\t-h: Show this message\\n" ;;
 		m) exec mpc-playlist-missing-search ;;
 		d) exec mpc-playlist-duplicate-search ;;
-		*) printf "OPTIONS:\\n\t-m: search only for songs with no playlist\\n\\t-p: search for duplicates in playlists\\n\\t-h: Show this message\\n" ;;
+		*) printf "OPTIONS:\\n\t-m: search only for songs with no playlist\\n\\t-d: search for duplicates in playlists\\n\\t-h: Show this message\\n" ;;
 	esac
 done
 
