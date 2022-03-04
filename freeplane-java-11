@@ -1,0 +1,11 @@
+#!/bin/sh
+# Opens freeplane using java 11 as it currently doesn't support the
+# latest versions of java.
+# The first argument (optional) specifies the file to open using freeplane.
+
+export PATH="/usr/lib/jvm/java-11-openjdk/bin/:$PATH"
+if [ -z "$1" ]; then
+	exec freeplane -U "$XDG_DATA_HOME/freeplane"
+else
+	exec freeplane -U "$XDG_DATA_HOME/freeplane" -- "$1"
+fi
