@@ -1,0 +1,18 @@
+#!/bin/sh
+# This script will create a backup of my home directory and
+# the mounted data filesystem using rsync
+
+# Backup home directory
+rsync --archive --verbose --update --links --delete --partial --progress \
+      --exclude-from=/home/robert/.config/rsync/ignore-list \
+	  /home/robert/ /run/media/robert/backup/home/
+
+# Backup data file system
+rsync --archive --verbose --update --links --delete --partial --progress \
+      --exclude-from=/home/robert/.config/rsync/ignore-list \
+	  /mnt/data/ /run/media/robert/backup/data/
+
+# Backup local binaries
+rsync --archive --verbose --update --links --delete --partial --progress \
+      --exclude-from=/home/robert/.config/rsync/ignore-list \
+	  /usr/local/bin/ /run/media/robert/backup/local-bin/
