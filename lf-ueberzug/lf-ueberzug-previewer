@@ -15,36 +15,49 @@ preview() {
 
 lf-ueberzug-cleaner # clean active preview
 
-preview_width="$4"
+preview_width="$(($4 - 2))"
 file="$1"; shift
-case "$(basename "$file" | tr '[:upper:]' '[:lower:]')" in
-*.tar*) tar tf "$file" ;;
-*.zip) unzip -l "$file" ;;
-*.rar) unrar l "$file" ;;
-*.7z) 7z l "$file" ;;
-*.avi|*.mp4|*.mkv)
-	thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-	ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
-	preview "$thumbnail" "$@"
-	;;
-*.pdf)
-	thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-	gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 "$file" >/dev/null
-	preview "$thumbnail" "$@"
-	;;
-*.jpg|*.jpeg|*.png|*.bmp)
-	preview "$file" "$@" ;;
-*.svg)
-	thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-	gm convert "$file" "$thumbnail"
-	preview "$thumbnail" "$@"
-	;;
-*.gif)
-	thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-	gm convert "$file[0]" "$thumbnail"
-	preview "$thumbnail" "$@"
-	;;
-*.mp3 | *.m4a | *.opus) mediainfo "$file" ;;
-*) bat --terminal-width "$(($preview_width - 2))" --force-colorization --style="plain,changes" -- "$file" ;;
+
+case "$(file --mime-type --brief --dereference -- "$file")" in
+	text/html)
+		lynx -width="$preview_width" -display_charset=utf-8 -dump "$file" ;;
+	text/* | */xml | application/json | application/x-sh | application/x-shellscript)
+		bat --terminal-width "$preview_width" \
+			--force-colorization \
+			--style="plain,changes" -- "$file" ;;
+	application/zip | application/gzip | application/x-tar | application/x-rar-compressed \
+		| application/x-zip-compressed | application/x-7z-coompressed)
+		atool --list -- "$file" ;;
+	audio/* | application/octet-stream)
+		mediainfo "$file" ;;
+	image/svg+xml)
+		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+		gm convert "$file" "$thumbnail"
+		preview "$thumbnail" "$@"
+		;;
+	image/gif)
+		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+		gm convert "$file[0]" "$thumbnail"
+		preview "$thumbnail" "$@"
+		;;
+	image/*)
+		preview "$file" "$@" ;;
+	video/*)
+		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+		ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
+		preview "$thumbnail" "$@"
+		;;
+	application/pdf)
+		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+		gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 "$file" >/dev/null
+		preview "$thumbnail" "$@"
+		;;
+	*opendocument*)
+		odt2txt --width="$preview_width" "$file" ;;
+	application/pgp-encrypted)
+		gpg -d -- "$file" ;;
+	*)
+		mediainfo "$file" ;;
 esac
+
 return 127 # nonzero retcode required for lf previews to reload
