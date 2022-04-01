@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# This code originates from:
+# https://github.com/slavistan/lf-gadgets
+
+cat <<EOF | paste -sd '' >"$LF_UEBERZUG_TEMPDIR/fifo"
+{
+"action": "remove",
+"identifier": "lf-preview"
+}
+EOF
