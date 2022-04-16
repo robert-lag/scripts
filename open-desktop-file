@@ -1,0 +1,14 @@
+#!/bin/sh
+# vim: filetype=sh
+# Opens the specified *.desktop file. It differentiates between the types:
+# - Applications
+# - Links
+
+file="$1"
+file_type=$(cat "$file" | grep "Type" | awk -F= '{ print $2 }')
+
+if [ "$file_type" = "Application" ]; then
+	dex "$file"
+elif [ "$file_type" = "Link" ]; then
+	$BROWSER "$file"
+fi
