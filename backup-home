@@ -2,17 +2,22 @@
 # This script will create a backup of my home directory and
 # the mounted data filesystem using rsync
 
+backup_drive=/run/media/robert/backup
+
 # Backup home directory
 rsync --archive --verbose --update --links --delete --partial --progress \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
-	  /home/robert/ /run/media/robert/backup/home/
+	  /home/robert/ $backup_drive/home/
 
 # Backup data file system
 rsync --archive --verbose --update --links --delete --partial --progress \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
-	  /mnt/data/ /run/media/robert/backup/data/
+	  /mnt/data/ $backup_drive/data/
 
 # Backup local binaries
 rsync --archive --verbose --update --links --delete --partial --progress \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
-	  /usr/local/bin/ /run/media/robert/backup/local-bin/
+	  /usr/local/bin/ $backup_drive/local-bin/
+
+# Create list of explicitly installed programs
+pacman -Qe > $backup_drive/installed-programs
