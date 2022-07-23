@@ -1,0 +1,18 @@
+#!/bin/sh
+# This script will restore my home directory from a
+# backup previously created with 'backup-home'
+# using rsync
+
+backup_drive=/run/media/robert/backup
+
+# Restore home directory
+rsync --archive --verbose --update --links --partial --progress \
+	  $backup_drive/home/ /home/robert/
+
+# Restore data file system
+rsync --archive --verbose --update --links --partial --progress \
+ 	  $backup_drive/data/ /mnt/data/
+
+# Restore local binaries
+rsync --archive --verbose --update --links --partial --progress \
+      $backup_drive/local-bin/ /usr/local/bin/
