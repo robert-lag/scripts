@@ -1,11 +1,25 @@
 #!/bin/sh
+# Shows a notification displaying information about
+# the currently playing song (using mpc)
 
 current_song=$(mpc current --format "%title%")
 artist=$(mpc current --format "%artist%")
 album=$(mpc current --format "%album%")
+if [ -e "$current_song" ]; then
+	directory=$(dirname $(mpc current --format "%file%"))
+fi
+icon_path=~/music/${directory}/AlbumArt.jpg
+
+message_title="$current_song"
 
 if [ -z "$album" ]; then
-	notify-send -u normal -t 4000 -- "$current_song" "by <i>$artist</i>"
+	message="by <i>$artist</i>"
 else
-	notify-send -u normal -t 4000 -- "$current_song" "by <i>$artist</i>\nfrom $album"
+	message="by <i>$artist</i>\nfrom <i>$album</i>"
+fi
+
+if [ -e $icon_path ]; then
+	notify-send -u normal -t 3000 --icon="$icon_path" -- "$message_title" "$message"
+else
+	notify-send -u normal -t 3000 --icon=~/music/AlbumArt.jpg -- "$message_title" "$message"
 fi

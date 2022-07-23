@@ -1,24 +1,54 @@
 #!/bin/sh
+# Show a notification displaying information about the
+# currently playing song (using mpc) including its state
 
+# Variables {{{1
 current_song=$(mpc current --format "%title%")
 artist=$(mpc current --format "%artist%")
 album=$(mpc current --format "%album%")
+if [ -e "$current_song" ]; then
+	directory=$(dirname $(mpc current --format "%file%"))
+fi
+icon_path=~/music/${directory}/AlbumArt.jpg
 
+# Show nothing if no song is playing
+if [ "$current_song" = "" ]; then
+	return
+fi
 
+current_time=$(mpc status "%currenttime%")
+total_time=$(mpc status "%totaltime%")
+current_seconds=$(echo "$current_time" | awk -F: '{ print ($1 * 60) + $2 }')
+total_seconds=$(echo "$total_time" | awk -F: '{ print ($1 * 60) + $2 }')
+
+# Calculate time percentage {{{1
+if [ "$total_seconds" -eq 0 ]; then
+	time_percentage=100
+else
+	time_percentage=$(echo "$current_seconds / $total_seconds * 100" | bc -l)
+fi
+
+# Get current player state {{{1
 case $MPD_PLAYER_STATE in
-	unknown) state="S" ;;
-	play) state="" ;;
-	pause) state="PAUSED " ;;
-	stop) state="STOPPED " ;;
-	*) state="State: $MPD_PLAYER_STATE " ;;
+	unknown) state="" ;;
+	play) state=" | " ;;
+	pause) state="  | " ;;
+	stop) state=" | " ;;
+	*) state="$MPD_PLAYER_STATE | " ;;
 esac
 
-if [ ! "$current_song" = "" ]; then
-	if [ -z "$album" ]; then
-		notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>"
-	else
-		notify-send -u normal -t 4000 -- "$state$current_song" "by <i>$artist</i>\nfrom $album"
-	fi
-elif [ ! "$state" = "" ]; then
-	notify-send -u normal -t 4000 -- "MPD $state"
+# Set message and title {{{1
+# message_title="$state$current_song"
+message_title="$current_song"
+if [ -z "$album" ]; then
+	message="by <i>$artist</i>"
+else
+	message="by <i>$artist</i>\nfrom <i>$album</i>"
+fi
+
+# Show message {{{1
+if [ -e $icon_path ]; then
+	notify-send -u normal -t 3000 --icon="$icon_path" --hint="int:value:${time_percentage}" -- "$message_title" "$message"
+else
+	notify-send -u normal -t 3000 --icon=~/music/AlbumArt.jpg -- "$message_title" "$message"
 fi
