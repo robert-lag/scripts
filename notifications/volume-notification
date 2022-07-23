@@ -1,0 +1,18 @@
+#!/bin/sh
+# Show a notification displaying the current volume
+
+current_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ '{ print $2 }' | sed 's/[[:space:]]*//' | sed 's/%//')
+mute_status=$(pactl get-sink-mute @DEFAULT_SINK@ | sed 's/Mute: //')
+
+if [ "$current_volume" -eq 0 -o "$mute_status" = "yes" ]; then
+	icon="volume-mute.png"
+elif [ "$current_volume" -le 33 ]; then
+	icon="volume-low.png"
+elif [ "$current_volume" -le 67 ]; then
+	icon="volume-medium.png"
+else
+	icon="volume-high.png"
+fi
+
+notify-send -u normal -t 1500 --icon="~/.local/bin/notifications/$icon" --hint="int:value:${current_volume}" -- "Volume"
+

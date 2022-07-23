@@ -1,0 +1,21 @@
+#!/bin/sh
+# Shows a notification displaying the current brightness of the screen
+
+current_brightness=$(xbacklight -get | sed 's/\.[0-9]*//g')
+echo "$current_brightness"
+
+if [ "$current_brightness" -le 17 ]; then
+	icon="brightness-1.png"
+elif [ "$current_brightness" -le 33 ]; then
+	icon="brightness-2.png"
+elif [ "$current_brightness" -le 50 ]; then
+	icon="brightness-3.png"
+elif [ "$current_brightness" -le 67 ]; then
+	icon="brightness-4.png"
+elif [ "$current_brightness" -le 83 ]; then
+	icon="brightness-5.png"
+else
+	icon="brightness-6.png"
+fi
+
+notify-send -u normal -t 1500 --icon="~/.local/bin/notifications/$icon" --hint="int:value:${current_brightness}" -- "Brightness"
