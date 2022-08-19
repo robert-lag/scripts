@@ -1,0 +1,8 @@
+#!/bin/sh
+# Changes the foreground color of the images into a
+# yellowish tint and saves the result in another file
+
+convert volume-high-original.png +level-colors transparent,"#b16286" volume-high.png
+convert volume-medium-original.png +level-colors transparent,"#b16286" volume-medium.png
+convert volume-low-original.png +level-colors transparent,"#b16286" volume-low.png
+convert volume-mute-original.png +level-colors transparent,"#b16286" volume-mute.png

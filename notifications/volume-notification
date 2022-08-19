@@ -1,18 +1,36 @@
 #!/bin/sh
-# Show a notification displaying the current volume
+# Changes the brightness depending on the passed parameter:
+# - "inc": Increses the volume
+# - "dec": Decreases the volume
+# - "toggle_mute": Decreases the volume
+# - otherwise: Does nothing
+#
+# Afterwards, shows a notification displaying the current volume
+
+volume_change=$1
+if [ "$volume_change" = "inc" ]; then
+    $(pactl set-sink-volume @DEFAULT_SINK@ +2% && \
+      pactl set-sink-mute @DEFAULT_SINK@ 0)
+elif [ "$volume_change" = "dec" ]; then
+    $(pactl set-sink-volume @DEFAULT_SINK@ -2% && \
+      pactl set-sink-mute @DEFAULT_SINK@ 0)
+elif [ "$volume_change" = "toggle_mute" ]; then
+    $(pactl set-sink-mute @DEFAULT_SINK@ toggle)
+fi
 
 current_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ '{ print $2 }' | sed 's/[[:space:]]*//' | sed 's/%//')
 mute_status=$(pactl get-sink-mute @DEFAULT_SINK@ | sed 's/Mute: //')
 
 if [ "$current_volume" -eq 0 -o "$mute_status" = "yes" ]; then
-	icon="volume-mute.png"
-elif [ "$current_volume" -le 33 ]; then
-	icon="volume-low.png"
-elif [ "$current_volume" -le 67 ]; then
-	icon="volume-medium.png"
+	icon="images/volume-mute.png"
 else
-	icon="volume-high.png"
+	icon="images/volume-high.png"
 fi
 
-notify-send -u normal -t 1500 --icon="~/.local/bin/notifications/$icon" --hint="int:value:${current_volume}" -- "Volume"
+notify-send --urgency=normal \
+    --expire-time=1500 \
+    --replace-id=1000 \
+    --icon="~/.local/bin/notifications/$icon" \
+    --hint="int:value:${current_volume}" \
+    -- "$current_volume"
 
