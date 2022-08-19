@@ -6,7 +6,7 @@
 current_song=$(mpc current --format "%title%")
 artist=$(mpc current --format "%artist%")
 album=$(mpc current --format "%album%")
-if [ -e "$current_song" ]; then
+if [ -n "$current_song" ]; then
 	directory=$(dirname $(mpc current --format "%file%"))
 fi
 icon_path=~/music/${directory}/AlbumArt.jpg
@@ -48,7 +48,14 @@ fi
 
 # Show message {{{1
 if [ -e $icon_path ]; then
-	notify-send -u normal -t 3000 --icon="$icon_path" --hint="int:value:${time_percentage}" -- "$message_title" "$message"
+    # Add a zero at the beginning of the percentage as 'notify-send' cannot parse numbers like
+    # '.475' as int. They need to have a at least one digit in front of the dot (e.g. '0.475').
+	notify-send -u normal -t 3000 \
+        --icon="$icon_path" \
+        --hint="int:value:0${time_percentage}" \
+        -- "$message_title" "$message"
 else
-	notify-send -u normal -t 3000 --icon=~/music/AlbumArt.jpg -- "$message_title" "$message"
+	notify-send -u normal -t 3000 \
+        --icon=~/music/AlbumArt.jpg \
+        -- "$message_title" "$message"
 fi
