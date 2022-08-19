@@ -1,0 +1,13 @@
+#!/bin/sh
+# Returns the current system volume or 0 if the volume is muted
+
+current_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ '{ print $2 }' | sed 's/[[:space:]]*//' | sed 's/%//')
+
+mute_status=$(pactl get-sink-mute @DEFAULT_SINK@ | sed 's/Mute: //')
+
+if [ "$mute_status" = "yes" ]; then
+    echo "0"
+else
+    echo "$current_volume"
+fi
+
