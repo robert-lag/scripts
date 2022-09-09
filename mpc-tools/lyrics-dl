@@ -1,0 +1,9 @@
+#!/bin/sh
+# Downloads the lyrics of the currently playing song
+
+artist=$(mpc current --format "%artist%")
+song_title=$(mpc current --format "%title%")
+lyrics_file="$XDG_DATA_HOME/lyrics/${artist} - ${song_title}.txt"
+
+azlyrics "$artist" "$song_title" > "$lyrics_file"
+

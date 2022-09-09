@@ -1,25 +1,37 @@
 #!/bin/sh
 # Show a notification displaying information about the
 # currently playing song (using mpc) including its state
+# Optionally the duration the notification should be displayed
+# can be passed to the script.
 
 # Variables {{{1
+if echo $1 | egrep -q '^[0-9]+$'; then
+    show_duration=$1
+else
+    show_duration=3000
+fi
 current_song=$(mpc current --format "%title%")
 artist=$(mpc current --format "%artist%")
 album=$(mpc current --format "%album%")
 if [ -n "$current_song" ]; then
 	directory=$(dirname $(mpc current --format "%file%"))
 fi
-icon_path=~/music/${directory}/AlbumArt.jpg
+
+current_time=$(mpc status "%currenttime%")
+total_time=$(mpc status "%totaltime%")
+current_seconds=$(echo "$current_time" | awk -F: '{ print ($1 * 60) + $2 }')
+total_seconds=$(echo "$total_time" | awk -F: '{ print ($1 * 60) + $2 }')
 
 # Show nothing if no song is playing
 if [ "$current_song" = "" ]; then
 	return
 fi
 
-current_time=$(mpc status "%currenttime%")
-total_time=$(mpc status "%totaltime%")
-current_seconds=$(echo "$current_time" | awk -F: '{ print ($1 * 60) + $2 }')
-total_seconds=$(echo "$total_time" | awk -F: '{ print ($1 * 60) + $2 }')
+# Get icon path {{{1
+icon_path=~/music/${directory}/AlbumArt.jpg
+if [ ! -e $icon_path ]; then
+    icon_path="~/music/AlbumArt.jpg"
+fi
 
 # Calculate time percentage {{{1
 if [ "$total_seconds" -eq 0 ]; then
@@ -40,22 +52,13 @@ esac
 # Set message and title {{{1
 # message_title="$state$current_song"
 message_title="$current_song"
-if [ -z "$album" ]; then
-	message="by <i>$artist</i>"
-else
-	message="by <i>$artist</i>\nfrom <i>$album</i>"
-fi
+message="$artist"
 
 # Show message {{{1
-if [ -e $icon_path ]; then
-    # Add a zero at the beginning of the percentage as 'notify-send' cannot parse numbers like
-    # '.475' as int. They need to have a at least one digit in front of the dot (e.g. '0.475').
-	notify-send -u normal -t 3000 \
-        --icon="$icon_path" \
-        --hint="int:value:0${time_percentage}" \
-        -- "$message_title" "$message"
-else
-	notify-send -u normal -t 3000 \
-        --icon=~/music/AlbumArt.jpg \
-        -- "$message_title" "$message"
-fi
+# Add a zero at the beginning of the percentage as 'notify-send' cannot parse numbers like
+# '.475' as int. They need to have a at least one digit in front of the dot (e.g. '0.475').
+notify-send -u normal -t "$show_duration" \
+    --replace-id=1001 \
+    --icon="$icon_path" \
+    --hint="int:value:0${time_percentage}" \
+    -- "$message_title" "$message"
