@@ -7,8 +7,12 @@ youtube-dl --add-metadata --ignore-errors --extract-audio \
 	--restrict-filenames \
 	-- "$1"
 
-created_file=$(ls | grep '^___---.*$')
-new_file_name=$(echo "$created_file" | cut -c7-)
-mv "$created_file" "$new_file_name"
-normalize-file-name "$new_file_name"
+created_files=$(ls | grep '^___---.*$')
+
+echo "$created_files" | while read -r file_name
+do
+    new_file_name=$(echo "$file_name" | cut -c7-)
+    mv "$file_name" "$new_file_name"
+    normalize-file-name "$new_file_name"
+done
 
