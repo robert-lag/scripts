@@ -1,13 +1,21 @@
 #!/bin/sh
+#
+# Usage: volume-notification [inc|dec|toggle_mute]
+#
 # Changes the brightness depending on the passed parameter:
 # - "inc": Increses the volume
 # - "dec": Decreases the volume
-# - "toggle_mute": Decreases the volume
+# - "toggle_mute": Toggles mute/unmute state
 # - otherwise: Does nothing
 #
 # Afterwards, shows a notification displaying the current volume
+#
+# Additionally, if a song is currently being played by mpc then a song notification
+# is shown at the same time.
 
 volume_change=$1
+
+# Change the volume {{{1
 if [ "$volume_change" = "inc" ]; then
     $(pactl set-sink-volume @DEFAULT_SINK@ +2% && \
       pactl set-sink-mute @DEFAULT_SINK@ 0)
@@ -18,6 +26,7 @@ elif [ "$volume_change" = "toggle_mute" ]; then
     $(pactl set-sink-mute @DEFAULT_SINK@ toggle)
 fi
 
+# Get notification parameters {{{1
 current_volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ '{ print $2 }' | sed 's/[[:space:]]*//' | sed 's/%//')
 mute_status=$(pactl get-sink-mute @DEFAULT_SINK@ | sed 's/Mute: //')
 
@@ -27,6 +36,8 @@ else
 	icon="images/volume-high.png"
 fi
 
+
+# Show volume notification {{{1
 notify-send --urgency=normal \
     --expire-time=1500 \
     --replace-id=1000 \
@@ -34,3 +45,8 @@ notify-send --urgency=normal \
     --hint="int:value:${current_volume}" \
     -- "$current_volume"
 
+# Show mpc notification if a song is currently playing {{{1
+mpc_state=$(mpc status '%state%')
+if [ "$mpc_state" = "playing" ]; then
+    show-mpd-player-state-msg 1450
+fi
