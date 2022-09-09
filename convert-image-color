@@ -1,0 +1,17 @@
+#!/bin/sh
+# Changes the foreground color of the given image
+# and saves the result in the same file
+# The new image will have the same name as the original
+# one but without '-original.png' at the end
+# Usage: convert-image [image-name [new-color]]
+
+original_image_name=$1
+new_image_name=$(echo "$original_image_name" | sed 's/-original.png/.png/')
+
+new_color=$2
+if [ -z "$new_color" ]; then
+    new_color = "#ebdbb2"
+fi
+
+echo "[${original_image_name}] --(${new_color})--> [${new_image_name}]"
+convert "$original_image_name" +level-colors transparent,"$new_color" "$new_image_name"
