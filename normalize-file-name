@@ -16,6 +16,7 @@ normalized_file=$(echo $input_file |
 	sed 's/\- /-/g' |
 	sed 's/ \-/-/g' |
 	tr ' ' '-' |
+	sed 's/\-\-/-/g' |
 	tr '[:upper:]' '[:lower:]')
 
 echo "Normalized:\t$normalized_file"
