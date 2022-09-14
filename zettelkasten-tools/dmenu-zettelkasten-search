@@ -3,41 +3,50 @@
 # using dmenu and makes it possible for the user to choose an item to open
 # or copy to the clipboard
 
-dmenu_entries=$(brn --dir $ZETTELKASTEN_DIR search "$1" | awk 'OFS=" - " { print $1,$2 }')
-
-while getopts "hocl" o
+while getopts ":hocl" o
 do
-	case "${o}" in
-		h)
-			printf "ARGUMENTS:\\n\t-o: open (default)\\n\\t-c: copy\\n\\t-h: Show this message\\n" && exit 1
-			;;
-		o)
-			chosen="$(echo "$dmenu_entries" |
-				dmenu -i -p "Note history:" -l 10)"
-
-			chosen_note_id=$(echo "$chosen" |
-				awk '{print $1}')
-			$TERMINAL -e brn --dir $ZETTELKASTEN_DIR open "$chosen_note_id"
-			;;
-		c)
-			echo "$dmenu_entries" |
-				dmenu -i -p "Copy note ID from history:" -l 10 |
-				awk '{print $1}' |
-				tr -d '\n' |
-				xclip -selection clipboard
-			;;
-		l)
-			chosen_note_id=$(echo "$dmenu_entries" |
-				dmenu -i -p "Copy note ID from history:" -l 10 |
-				awk '{print $1}' |
-				tr -d '\n')
-
-			note_link="[[${chosen_note_id}]]"
-
-			echo "$note_link" | xclip -selection clipboard
-			;;
-		*)
-			printf "Invalid option -$s\\nTry '-h' for more information.\n" "$OPTARG" && exit 1
-			;;
-	esac
+    case "${o}" in
+        h)
+            printf "ARGUMENTS:\\n\t-o: open note (default)\\n\\t-c: copy note ID\\n\\t-l: copy note link\\n\\t-h: Show this message\\n" && exit 1
+            ;;
+        o) activity="open" ;;
+        c) activity="copy-id" ;;
+        l) activity="copy-link" ;;
+        ?)
+            printf "Invalid option -$s\\nTry '-h' for more information.\n" "$OPTARG" && exit 1
+            ;;
+    esac
 done
+
+shift "$(($OPTIND -1))"
+
+brn_history=$(brn --dir $ZETTELKASTEN_DIR search "$1")
+dmenu_entries=$(echo "$brn_history" | awk '{ $1 = $1 OFS "-" }1')
+
+case "$activity" in
+    open)
+        chosen="$(echo "$dmenu_entries" |
+            dmenu -i -p "Note history:" -l 10)"
+
+        chosen_note_id=$(echo "$chosen" |
+            awk '{print $1}')
+        $TERMINAL -e brn --dir $ZETTELKASTEN_DIR open "$chosen_note_id"
+        ;;
+    copy-id)
+        echo "$dmenu_entries" |
+            dmenu -i -p "Copy note ID from history:" -l 10 |
+            awk '{print $1}' |
+            tr -d '\n' |
+            xclip -selection clipboard
+        ;;
+    copy-link)
+        chosen_note_id=$(echo "$dmenu_entries" |
+            dmenu -i -p "Copy note link from history:" -l 10 |
+            awk '{print $1}' |
+            tr -d '\n')
+
+        note_link="[[${chosen_note_id}]]"
+
+        echo "$note_link" | xclip -selection clipboard
+        ;;
+esac
