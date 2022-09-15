@@ -7,7 +7,7 @@
 current_song=$(mpc current --format "%title%")
 artist=$(mpc current --format "%artist%")
 album=$(mpc current --format "%album%")
-if echo $1 | egrep -q '^[0-9]+$'; then
+if echo $1 | grep -Eq '^[0-9]+$'; then
     show_duration=$1
 else
     show_duration=3000
