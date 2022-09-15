@@ -1,0 +1,138 @@
+#TAG,NAME IN REPO (or git url),PURPOSE (should be a verb phrase to sound right while installing)
+,atool,"is a swiss army knife for managing archives."
+,bat,"is a rewrite of 'cat' with syntax highlighting and other features."
+,breeze,"is a style for graphical applications."
+,breeze-icons,"is an icon theme for graphical applications."
+,cups,"is an open-source printing system."
+,dash,"is a shell that's much faster than bash but has less features (used to execute scripts)."
+A,dashbinsh,"creates a symlink between /bin/sh and /bin/dash to make scripts execute faster."
+A,devour,"is a program for opening windows 'above' the current one (in twm's)."
+,difftastic,"is a diff tool that compares files based on their syntax (used by nvim)."
+,dhcpcd,"is a dhcp client."
+,dosfstools,"allows your computer to access dos-like filesystems."
+A,dragon-drag-and-drop,"allows dragging and dropping from/to the terminal."
+,dunst,"is a suckless notification system."
+,ffmpeg,"can record and splice video and audio on the command line. (dependency of lf-ueberzug)"
+,firefox,"is a privacy-focused webbrowser created by mozilla."
+A,flashfocus-git,"lets you flash the active window."
+A,freeplane,"is a tool for creating and viewing mindmaps."
+,fzf,"is a fuzzy finder tool."
+,ghostscript,"is an interpreter for PDF and PostScript. (dependency of lf-ueberzug)"
+,gimp,"is an image editing program."
+,gnucash,"is a personal financial-accounting application."
+,gnucash-docs,"is the documentation of gnucash."
+,graphicsmagick,"is an image processing program. (dependency of lf-ueberzug)"
+,grub-customizer,"is a GUI application that lets you easily customize your GNU grub config."
+A,gtk-theme-arc-gruvbox-git,"is a dark theme for gtk applications."
+A,gtk-youtube-viewer-git,"is a gtk wrapper over youtube-viewer"
+,gvfs,"is necessary to access android devices."
+,gvfs-gphoto2,"is necessary to access android devices."
+,gvfs-mtp,"is necessary to access android devices."
+,hplip,"contains drivers for HP printers."
+A,htop-vim-git,"is a graphical and colorful system monitor."
+A,lf-git,"is an extensive terminal file manager that everyone likes. (dependency of lf-ueberzug)"
+A,libxft-bgra,"is a patched version of libxft that allows displaying colored emoji in Suckless software."
+,libertinus-font,"provides sans, serif and monospace fonts."
+,libnotify,"allows desktop notifications."
+,lxappearance,"is an application for changing gtk themes."
+,lynx,"is a terminal browser. It can also dump html previews to stdout."
+,maim,"is a small screenshot terminal application."
+,man-db,"lets you read man pages of programs."
+,mediainfo,"shows audio and video information."
+,mpc,"is a terminal interface for mpd."
+,mpd,"is a lightweight music daemon."
+,mpv,"is the patrician's choice video player."
+,nautilus,"is a GUI file explorer used as a fallback."
+,ncmpcpp,"a ncurses interface for music with multiple formats and a powerful tag editor."
+,neofetch,"displays system information on the terminal."
+,neovim,"a tidier vim with some useful features."
+A,nerd-fonts-hack,"is a monospace font that's patched to be able to display icons."
+,newsboat,"is a terminal RSS client."
+A,notion-app,"is a note management software."
+,noto-fonts-emoji,"is an emoji font."
+,ntfs-3g,"allows accessing NTFS partitions."
+,okular,"is a pdf-viewer with tools for annoting pdfs."
+,pacman-contrib,"is a package containing scripts for easier use of pacman (e.g. rankmirrors)."
+,picom,"is used for displaying transparent windows."
+,polybar,"is a status bar for window managers."
+,pulseaudio,"is the audio system."
+,redshift,"is a blue light filter."
+A,ruby-vimgolf,"is a vimgolf client."
+,rsync,"is a tool for creating backups of files and folders."
+,sane,"is an API for accessing scanners."
+A,sc-im,"is an Excel-like terminal spreadsheet manager."
+,signal-desktop,"is a desktop version of the Signal messenger app."
+,simple-mtpfs,"enables the mounting of android devices."
+,stow,"is a program for automatically creating symlinks (used for automatic deployment of dotfiles)."
+,sxhkd,"is a hotkey daemon that enables universal keybinding independent of the window manager."
+,sxiv,"is a minimalist image viewer."
+,syncthing,"lets you synchronize folders across multiple devices."
+,system-config-printer,"is a printer configuration tool for CUPS."
+,texlive-most,"is a group of most used libraries when working with LaTeX."
+,thunderbird,"is a email-client created by mozilla."
+,trash-cli,"is a recycle bin command line interface."
+,ueberzug,"can be used to draw images on terminals. (dependency of lf-ueberzug)"
+,unrar,"extracts rar's."
+,unzip,"unzips zip's."
+,usbutils,"is a collection of tools to query connected USB devices."
+,vim-plug,"is a plugin manager for vim / neovim."
+A,vscodium-bin,"is an open-source code editor forked from vscode."
+,wireless_tools,"is a collection of tools for manipulating wireless connections."
+,wpa_supplicant,"is a utility for accessing WPA wireless networks."
+,xautolock,"is a program that makes it possible to lock the screen after a specified amount of time."
+A,xbanish,"hides an inactive mouse."
+,xclip,"allows for copying and pasting from the command line."
+,xdotool,"provides window action utilities on the command line."
+,xdg-user-dirs,"makes it possible to specifiy user directories."
+,xorg-server,"is the graphical server."
+,xorg-xbacklight,"enables changing screen brightness levels."
+,xorg-xdpyinfo,"aids with resolution determination and screen recording."
+,xorg-xev,"prints information about X events (e.g. keyboard, mouse events)."
+,xorg-xinit,"starts the graphical server."
+,xorg-xprop,"is a tool for detecting window properties."
+,xorg-xrandr,"is a simple commandline interface for setting up multiple monitors."
+,xorg-xwininfo,"allows querying information about windows."
+,xsecurelock,"is used for locking the screen."
+,xwallpaper,"sets the wallpaper."
+,xsane,"is a GUI interface for 'sane' (scanning API)."
+,youtube-dl,"can download any YouTube video (or playlist or channel) when given the link."
+,zathura,"is a pdf viewer with vim-like bindings."
+,zathura-pdf-mupdf,"allows mupdf pdf compatibility in zathura."
+,zip,"is used for creating *.zip files."
+,libqalculate,"is a terminal calculator."
+A,zsh,"is a shell that's slower than bash but has more features (used as interactive shell)."
+A,zsh-fast-syntax-highlighting,"provides syntax highlighting for zsh in the shell."
+
+/* TODO: Check if url is working (likely not) */
+G,https://github.com/slavistan/lf-gadgets/tree/master/lf-ueberzug,"makes it possible to preview files like pdfs and images in lf."
+
+
+/* Programs I'm currently trying out */
+,taskell,"is a local trello alternative in the terminal."
+A,zaread-git,"makes it possible to open MS Office/LibreOffice documents with zathura."
+,pandoc,"can be used to convert from one markdown format to another (dependency of zaread)."
+
+/* Programs that I need to replace with my own*/
+/* G,https://github.com/LukeSmithxyz/dwmblocks.git,"serves as the modular status bar." */
+/* G,https://github.com/lukesmithxyz/dmenu.git,"runs commands and provides a UI for selection." */
+/* G,https://github.com/lukesmithxyz/st.git,"is my custom build of suckless's terminal emulator." */
+/* G,https://github.com/lukesmithxyz/dwm.git,"is the window manager." */
+
+
+/* Programs that I want to try out*/
+/* ,xcompmgr,"is for transparency and removing screen-tearing." */
+/* ,pulseaudio-alsa,"is the audio system." */
+/* ,pulsemixer,"is an audio controller." */
+/* ,pamixer,"is a command-line audio interface." */
+/* A,task-spooler,"queues commands or files for download." */
+/* A,mutt-wizard-git,"is a light-weight terminal-based email system." */
+/* ,abook,"is an offline addressbook usable by neomutt." */
+/* ,xcape,"gives the special escape/super mappings of LARBS." */
+
+/* Programs that I might not need */
+/* ,exfat-utils,"allows management of FAT drives." */
+/* ,highlight,"can highlight code output." */
+/* A,spotify-adblock-git,"is an adfree version of a music player for listening to music online." */
+/* A,brave-bin,"is an elegant browser with built-in adblocking, tor and other features." */
+/* ,poppler,"manipulates .pdfs and gives .pdf previews and other .pdf functions." */
+/* ,gnome-keyring,"serves as the system keyring." */
