@@ -6,17 +6,19 @@
 iwctl station wlan0 scan
 available_networks=$(iwctl station wlan0 get-networks |
 	awk -F '[[:space:]][[:space:]]+' '/./ {
-	if(NR > 4)
+	if(NR > 5)
 	{
-		printf "%-40s  %4s\n", $2, $4
+		printf "%-30s  %4s      %4s\n", $2, $3, $4
 	}
 }' | sed 's/\x1b/#/g' | cut -f1 -d"#")
 
-selected_network=$(echo "$available_networks" | dmenu -l 10)
+selected_network=$(echo "$available_networks" | dmenu -l 10 -p "Connect to:")
 
 selected_network_name=$(echo "$selected_network" |
 	awk -F '[[:space:]][[:space:]]+' '{ print $1 }')
+selected_network_security=$(echo "$selected_network" |
+	awk -F '[[:space:]][[:space:]]+' '{ print $2 }')
+
 [ -z "$selected_network_name" ] && exit 1
-echo "$selected_network_name"
 
 $TERMINAL -e $SHELL -c "iwctl station wlan0 connect \"${selected_network_name}\""
