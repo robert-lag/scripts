@@ -1,0 +1,13 @@
+#!/bin/sh
+# Returns the current microphone volume or 0 if the volume is muted
+
+current_volume=$(pactl get-source-volume @DEFAULT_SOURCE@ | awk -F/ '{ print $2 }' | sed 's/[[:space:]]*//' | sed 's/%//')
+
+mute_status=$(pactl get-source-mute @DEFAULT_SOURCE@ | sed 's/Mute: //')
+
+if [ "$mute_status" = "yes" ]; then
+    echo "0"
+else
+    echo "$current_volume"
+fi
+
