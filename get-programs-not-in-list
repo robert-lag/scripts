@@ -1,0 +1,23 @@
+#!/bin/sh
+# Returns a list of programs that were explicitly installed by the user and
+# aren't in the supplied *.csv file ($1)
+#
+# The *.csv file should be in the following format:
+# [tag (A|G|P)],<package-name>,<package-description>
+
+csv_file=$1
+packages_in_list=$(cat "$csv_file" |
+    sed '/^[ ]*$/d' |
+    sed -E '/^[%#/].*$/d' |
+    awk -F, '{ print $2 }')
+
+explicitly_installed_packages=$(pacman -Qet | awk '{ print $1 }')
+
+echo "$explicitly_installed_packages" | while read -r installed_package
+do
+    in_list=$(echo "$packages_in_list" | grep "$installed_package")
+
+    if [ -z "$in_list" ]; then
+        echo "$installed_package"
+    fi
+done
