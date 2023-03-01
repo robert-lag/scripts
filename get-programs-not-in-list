@@ -6,6 +6,11 @@
 # [tag (A|G|P)],<package-name>,<package-description>
 
 csv_file=$1
+if [ -z "$csv_file" ]; then
+    echo "Please specify a *.csv file containing package names!"
+    exit 1;
+fi
+
 packages_in_list=$(cat "$csv_file" |
     sed '/^[ ]*$/d' |
     sed -E '/^[%#/].*$/d' |
