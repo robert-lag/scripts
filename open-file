@@ -1,0 +1,30 @@
+#!/bin/sh
+
+while getopts "a" o
+do
+    case "$o" in
+        a) open_alternative=true
+    esac
+done
+
+shift $((OPTIND-1))
+
+file="$1"
+
+if [ -z "$open_alternative" ]; then
+    case $(file-type "$file") in
+        text/*|application/json) $EDITOR "$file";;
+        application/x-sc) sc-im "$file";;
+        application/x-freeplane) freeplane-java-11 "$file" ;;
+        *) xdg-open "$file" & ;;
+    esac
+else
+    case $(file-type "$file") in
+        application/pdf) devour okular "$file" ;;
+        image/*) devour gimp "$file" ;;
+        text/html) firefox "$file" & ;;
+        application/x-freeplane) freeplane-java-11 "$file" ;;
+        application/desktop-entry) open-desktop-file "$file" ;;
+        *) $EDITOR "$file";;
+    esac
+fi
