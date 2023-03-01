@@ -18,14 +18,16 @@ lf-ueberzug-cleaner # clean active preview
 preview_width="$(($4 - 2))"
 file="$1"; shift
 
-case "$(file --mime-type --brief --dereference -- "$file")" in
+case "$(file-type "$file")" in
 	text/html)
 		lynx -width="$preview_width" -display_charset=utf-8 -dump "$file" ;;
-	text/* | */xml | application/json | application/x-sh | application/x-shellscript)
+	text/* | */xml | application/json | application/x-sh \
+        | application/x-shellscript)
 		bat --terminal-width "$preview_width" \
 			--force-colorization \
 			--style="plain,changes" -- "$file" ;;
-	application/zip | application/gzip | application/x-tar | application/x-rar-compressed \
+	application/zip | application/gzip | application/x-tar \
+        | application/x-rar-compressed \
 		| application/x-zip-compressed | application/x-7z-coompressed)
 		atool --list -- "$file" ;;
 	audio/* | application/octet-stream)
