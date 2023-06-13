@@ -3,7 +3,7 @@
 while getopts "a" o
 do
     case "$o" in
-        a) open_alternative=true
+        a) open_alternative=true ;;
     esac
 done
 
@@ -23,7 +23,7 @@ else
         application/pdf) devour okular "$file" ;;
         image/*) devour gimp "$file" ;;
         text/html) firefox "$file" & ;;
-        application/x-freeplane) freeplane-java-11 "$file" ;;
+        application/x-freeplane) freeplane "$file" ;;
         application/desktop-entry) open-desktop-file "$file" ;;
         *) $EDITOR "$file";;
     esac
