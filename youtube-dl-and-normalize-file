@@ -2,7 +2,7 @@
 # Downloads the audio track of a youtube video using youtube-dl
 # and normalizes its file name (replaces special characters, etc.).
 
-youtube-dl --add-metadata --ignore-errors --extract-audio \
+yt-dlp --add-metadata --ignore-errors --extract-audio \
 	--output '___---%(title)s.%(ext)s' \
 	--restrict-filenames \
 	-- "$1"
