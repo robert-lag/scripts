@@ -5,17 +5,17 @@
 backup_drive=/run/media/robert/backup
 
 # Backup home directory
-rsync --archive --verbose --update --links --delete --partial --progress \
+rsync --archive --verbose --update --links --delete --partial --progress --force \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
 	  /home/robert/ $backup_drive/home/
 
 # Backup data file system
-rsync --archive --verbose --update --links --delete --partial --progress \
+rsync --archive --verbose --update --links --delete --partial --progress --force \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
 	  /mnt/data/ $backup_drive/data/
 
 # Backup local binaries
-rsync --archive --verbose --update --links --delete --partial --progress \
+rsync --archive --verbose --update --links --delete --partial --progress --force \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
 	  /usr/local/bin/ $backup_drive/local-bin/
 
