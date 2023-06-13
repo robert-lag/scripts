@@ -1,0 +1,16 @@
+#!/bin/sh
+# Updates multi-monitor configuration using xrandr
+
+standard_output="eDP1"
+monitor_output="HDMI1"
+monitor_resolution="1920x1080"
+monitor_status=$(cat /sys/class/drm/card0-HDMI-A-1/status)
+
+xrandr --addmode $monitor_output $monitor_resolution
+
+if [ "$monitor_status" = "connected" ]; then
+    xrandr --output $monitor_output --mode $monitor_resolution --left-of $standard_output
+    setbg
+else
+    xrandr --output $monitor_output --same-as $standard_output
+fi
