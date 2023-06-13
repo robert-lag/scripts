@@ -5,7 +5,7 @@ all_playlist_names=$(mpc lsplaylists)
 
 while IFS= read -r playlist_name
 do
-	songs_in_current_playlist=$(mpc --format "%title%" playlist "$playlist_name" | sort)
+	songs_in_current_playlist=$(mpc --format "%title%-%artist%" playlist "$playlist_name" | sort)
 	duplicate_songs_in_current_playlist=$(printf '%s\n' "$songs_in_current_playlist" | uniq -d)
 
 	if [ -n "$duplicate_songs_in_current_playlist" ]; then
