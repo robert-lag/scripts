@@ -1,0 +1,24 @@
+#!/bin/sh
+# A Vimdiff replacement using nvim
+
+if [ -z "$3" ]; then
+    # $1 = Local
+    # $2 = Remote
+    nvim -d $1 $2
+elif [ -z "$4" ]; then
+    # $1 = Local
+    # $2 = Base
+    # $3 = Remote
+    # $2 must come last as the last pane is moved down
+    # which should be the base pane
+    nvim -d $1 $3 $2 -c '$wincmd w' -c 'wincmd J'
+elif [ -n "$4" ]; then
+    # $1 = Local
+    # $2 = Base
+    # $3 = Remote
+    # $4 = Merged
+    nvim -d $1 $2 $3 $4 -c '$wincmd w' -c 'wincmd J'
+else
+    echo "nvimdiff file1 file2 [file3 [file4]]"
+fi
+
