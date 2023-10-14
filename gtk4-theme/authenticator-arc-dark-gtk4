@@ -1,0 +1,4 @@
+#!/bin/sh
+
+GTK_THEME="Arc-Dark" authenticator
+
