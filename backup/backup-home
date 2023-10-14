@@ -4,6 +4,9 @@
 
 backup_drive=/run/media/robert/backup
 
+# Create list of explicitly installed programs
+pacman -Qe > $backup_drive/installed-programs
+
 # Backup home directory
 rsync --archive --verbose --update --links --delete --partial --progress --force \
       --exclude-from=/home/robert/.config/rsync/ignore-list \
@@ -19,5 +22,3 @@ rsync --archive --verbose --update --links --delete --partial --progress --force
       --exclude-from=/home/robert/.config/rsync/ignore-list \
 	  /usr/local/bin/ $backup_drive/local-bin/
 
-# Create list of explicitly installed programs
-pacman -Qe > $backup_drive/installed-programs
