@@ -51,7 +51,7 @@ case "$(file-type "$file")" in
 		;;
 	application/pdf)
 		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-		gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 "$file" >/dev/null
+		gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 -dUseCropBox "$file" >/dev/null
 		preview "$thumbnail" "$@"
 		;;
 	*opendocument*)
