@@ -4,7 +4,6 @@
 #	Run by itself, set the wallpaper (at X start).
 #	If given a file, set that as the new wallpaper.
 #	If given a directory, choose random file in it.
-#	If wal is installed, also generates a colorscheme.
 
 wallpaper_link="${XDG_DATA_HOME:-$HOME/.local/share/}/bg"
 new_wallpaper="$(readlink -f "$1")" &&
@@ -25,10 +24,6 @@ case "$(file --mime-type -b "$new_wallpaper")" in
 	*) notify-send -t 3000 "Error" "Not a valid image" ; exit 1;;
 esac
 
-# If pywal is installed, generate colorscheme based on wallpaper
-command -v wal >/dev/null 2>&1 &&
-	wal -i "$new_wallpaper" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1 &&
-	pidof dwm >/dev/null && xdotool key super+F12
-
 # Apply wallpaper
 xwallpaper --zoom "$wallpaper_link"
+
