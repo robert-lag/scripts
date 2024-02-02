@@ -1,14 +1,19 @@
 #!/bin/sh
 # Sets the lockscreen lockscreen to the file with the given path
 
-
 lockscreen_link="${LOCKSCREEN_DIR:-$HOME/.local/share/lockscreen/}"
 new_lockscreen="$(readlink -f "$1")" &&
 
+mkdir --parents "$lockscreen_link"
+
+# Remove previous lockscreen images
+rm "$lockscreen_link"/*
+
+# Add new lockscreen image
 case "$(file --mime-type -b "$new_lockscreen")" in
 	image/* )
 		ln -s --force "$new_lockscreen" "$lockscreen_link" &&
-			notify-send -t 3000 -i "$lockscreen_link" "Lockscreen changed"
+			notify-send -t 3000 -i "$new_lockscreen" "Lockscreen changed"
 		;;
 	*) notify-send -t 3000 "Error" "Not a valid image" ; exit 1;;
 esac
