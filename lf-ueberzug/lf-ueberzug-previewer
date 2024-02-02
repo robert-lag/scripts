@@ -50,9 +50,14 @@ case "$(file-type "$file")" in
 		preview "$thumbnail" "$@"
 		;;
 	application/pdf)
-		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-		gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 -dUseCropBox "$file" >/dev/null
-		preview "$thumbnail" "$@"
+        if qpdf --requires-password "$file"; then
+            printf "\033[0;31m%s\033[0m\n" "*** Password protected ***"
+            mediainfo "$file"
+        else
+            thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+            gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 -dUseCropBox "$file" >/dev/null
+            preview "$thumbnail" "$@"
+        fi
 		;;
 	*opendocument*)
 		odt2txt --width="$preview_width" "$file" ;;
