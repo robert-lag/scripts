@@ -46,7 +46,7 @@ case "$file_ext" in
     *.gif)
         file_type="image/gif"
         ;;
-    *.txt)
+    *.txt|*.lua)
         file_type="text/plain"
         ;;
     *.html|*.htm)
@@ -66,6 +66,15 @@ case "$file_ext" in
         ;;
     *.odt)
         file_type="application/vnd.oasis.opendocument.text"
+        ;;
+    *.c)
+        file_type="text/x-c"
+        ;;
+    *.cpp)
+        file_type="text/x-c++"
+        ;;
+    *.h)
+        file_type="text/x-c"
         ;;
 
     # Custom file types
