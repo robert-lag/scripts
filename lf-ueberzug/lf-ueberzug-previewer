@@ -21,8 +21,8 @@ file="$1"; shift
 case "$(file-type "$file")" in
 	text/html)
 		lynx -width="$preview_width" -display_charset=utf-8 -dump "$file" ;;
-	text/* | */xml | application/json | application/x-sh \
-        | application/x-shellscript)
+	text/* | */xml | application/json | application/javascript \
+        | application/x-sh | application/x-shellscript)
 		bat --terminal-width "$preview_width" \
 			--force-colorization \
 			--style="plain,changes" -- "$file" ;;
