@@ -23,7 +23,11 @@ case "$file_ext" in
         file_type="video/x-msvideo"
         ;;
     *.mp4)
+        # Could also be 'audio/mp4', but usually 'video/mp4'
         file_type="video/mp4"
+        ;;
+    *.m4a)
+        file_type="audio/mp4"
         ;;
     *.mpeg)
         file_type="video/mpeg"
@@ -46,6 +50,9 @@ case "$file_ext" in
     *.gif)
         file_type="image/gif"
         ;;
+    *.heic)
+        file_type="image/heic"
+        ;;
     *.txt|*.lua)
         file_type="text/plain"
         ;;
@@ -54,6 +61,9 @@ case "$file_ext" in
         ;;
     *.md)
         file_type="text/markdown"
+        ;;
+    *.js)
+        file_type="application/javascript"
         ;;
     *.xml)
         file_type="application/xml"
