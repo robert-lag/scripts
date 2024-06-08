@@ -2,7 +2,7 @@
 # Provides the ability to drop a file in an appearing window
 # to copy it to the current directory
 
-files=$(dragon-drag-and-drop --target --and-exit)
+files=$(dragon-drop --target --and-exit)
 
 for file in $files
 do
