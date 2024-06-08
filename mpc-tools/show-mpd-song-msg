@@ -18,7 +18,7 @@ if [ -n "$current_song" ]; then
 fi
 icon_path=~/music/${directory}/AlbumArt.jpg
 if [ ! -e $icon_path ]; then
-    icon_path="~/music/AlbumArt.jpg"
+    icon_path=~/music/AlbumArt.jpg
 fi
 
 message_title="$current_song"
