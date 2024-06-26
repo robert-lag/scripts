@@ -42,6 +42,11 @@ case "$(file-type "$file")" in
 		gm convert "$file[0]" "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
+	image/heic)
+		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+        heif-thumbnailer "$file" "$thumbnail"
+		preview "$thumbnail" "$@"
+		;;
 	image/*)
 		preview "$file" "$@" ;;
 	video/*)

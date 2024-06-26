@@ -41,7 +41,7 @@ fi
 notify-send --urgency=normal \
     --expire-time=1500 \
     --replace-id=1000 \
-    --icon="~/.local/bin/notifications/$icon" \
+    -i ~/.local/bin/notifications/$icon \
     --hint="int:value:${current_volume}" \
     -- "$current_volume"
 

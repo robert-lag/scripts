@@ -30,7 +30,7 @@ fi
 # Get icon path {{{1
 icon_path=~/music/${directory}/AlbumArt.jpg
 if [ ! -e $icon_path ]; then
-    icon_path="~/music/AlbumArt.jpg"
+    icon_path=~/music/AlbumArt.jpg
 fi
 
 # Calculate time percentage {{{1
