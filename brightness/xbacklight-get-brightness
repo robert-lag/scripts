@@ -1,0 +1,6 @@
+#!/bin/sh
+# Returns the current brightness
+
+current_brightness=$(xbacklight -get | sed 's/\.[0-9]*//g')
+echo "$current_brightness"
+

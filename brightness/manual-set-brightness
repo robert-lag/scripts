@@ -1,0 +1,55 @@
+#!/bin/sh
+# Sets the brightness to the passed value in percent (or max brightness if it is
+# over 100%)
+#
+# -i: To increment the brightness by the supplied value (in percent)
+# -d: To decrement the brightness by the supplied value (in percent)
+# -h,-?: Show help
+
+current_brightness=$(cat "/sys/class/backlight/amdgpu_bl1/brightness")
+max_brightness=$(cat "/sys/class/backlight/amdgpu_bl1/max_brightness")
+
+USAGE="Usage: set-brightness [-i] [-d] [-h] [-?] <value>
+
+-h,-?   show this help message
+-i      increment the brightness by the passed value
+-d      decrement the brightness by the passed value
+"
+
+increment=false
+decrement=false
+
+while getopts "idh?" opt; do
+    case "$opt" in
+        h|\?)
+            echo "$USAGE"
+            exit 0
+        ;;
+        i) increment=true
+        ;;
+        d) decrement=true
+        ;;
+        *)
+            echo "$USAGE"
+            exit 1
+  esac
+done
+
+shift $((OPTIND-1))
+
+new_value=0
+
+if [ "$increment" = true ]; then
+    new_value=$(echo "$current_brightness + $max_brightness * $1 / 100" | bc)
+elif [ "$decrement" = true ]; then
+    new_value=$(echo "$current_brightness - $max_brightness * $1 / 100" | bc)
+else
+    new_value=$(echo "$1 * $max_brightness / 100" | bc)
+fi
+
+if [ "$new_value" -gt "$max_brightness" ]; then
+    new_value=$max_brightness
+fi
+
+echo "$new_value" | tee "/sys/class/backlight/amdgpu_bl1/brightness"
+
