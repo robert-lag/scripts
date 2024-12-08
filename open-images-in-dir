@@ -1,0 +1,11 @@
+#!/bin/sh
+# Get all image files, sort them by their modification time (newest first)
+# and show them in nsxiv
+
+find . -maxdepth 1 -type f \
+    -regextype "posix-extended" \
+    -iregex ".*\.jpg|.*\.jpeg|.*\.png|.*\.webp|.*\.bmp|.*\.tiff|.*\.tif|.*\.raw|.*\.ico|.*\.exif|.*\.heic|.*\.heif|.*\.gif|.*\.avif|.*\.jxl" \
+    -printf "%T+ %p\n" \
+    | sort --reverse \
+    | awk '{print $2}' \
+    | nsxiv --stdin --thumbnail --scale-mode=f --animate --quiet --private
