@@ -1,0 +1,21 @@
+#!/bin/sh
+# Displays all W-LAN routers in the vicinity in a dmenu prompt. If the user
+# selects one of them a password prompt is shown or if the router has been
+# saved you will be connected to it even without a prompt.
+
+available_devices=$(bluetoothctl devices |
+	awk -F '[[:space:]][[:space:]]*' '/./ {
+        printf "%-18s ", $2
+        for (i=3; i<NF; i++)
+            printf "%s ", $i
+        print $NF
+}')
+
+selected_device=$(echo "$available_devices" | dmenu -l 10 -p "Connect to:")
+
+selected_device_id=$(echo "$selected_device" |
+	awk -F '[[:space:]][[:space:]]+' '{ print $1 }')
+
+[ -z "$selected_device_id" ] && exit 1
+
+$TERMINAL -e $SHELL -c "bluetoothctl connect ${selected_device_id}"
