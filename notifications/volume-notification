@@ -42,6 +42,7 @@ notify-send --urgency=normal \
     --expire-time=1500 \
     --replace-id=1000 \
     -i ~/.local/bin/notifications/$icon \
+    --hint="string:desktop-entry:volume-notification" \
     --hint="int:value:${current_volume}" \
     -- "$current_volume"
 
