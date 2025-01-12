@@ -9,7 +9,12 @@ done through environment variables:
  - XSECURELOCK_SAVER_WEATHER: path to weather text
  - XSECURELOCK_SAVER_FONT: font family to use to display clock and weather
  - XSECURELOCK_SAVER_CLOCK_FONT_SIZE: font size to use to display clock
+ - XSECURELOCK_SAVER_DATE_FONT_SIZE: font size to use to display date
  - XSECURELOCK_SAVER_WEATHER_FONT_SIZE: font size to use to display weather
+ - XSECURELOCK_SAVER_FONT_COLOR_RGBA: font color in rgba (from 0 to 1; separated by '/')
+ - XSECURELOCK_SAVER_FONT_SHADOW_COLOR_RGBA: font color in rgba (from 0 to 1; separated by '/')
+
+This script needs to be placed in /usr/local/bin/
 
 """
 
@@ -81,11 +86,11 @@ def on_overlay_draw(widget, cctx, ctx):
     def draw(what):
         x, y = cctx.get_current_point()
         # Text Shadow
-        cctx.set_source_rgba(0, 0, 0, 0.3)
+        cctx.set_source_rgba(ctx.font_shadow_color_red, ctx.font_shadow_color_green, ctx.font_shadow_color_blue, ctx.font_shadow_color_alpha)
         cctx.move_to(x + 2, y + 2)
         cctx.show_text(what)
         # Text
-        cctx.set_source_rgba(1, 1, 1, 0.7)
+        cctx.set_source_rgba(ctx.font_color_red, ctx.font_color_green, ctx.font_color_blue, ctx.font_color_alpha)
         cctx.move_to(x, y)
         cctx.show_text(what)
 
@@ -99,16 +104,16 @@ def on_overlay_draw(widget, cctx, ctx):
         )
         cctx.set_font_size(ctx.clock_font_size)
         _, _, twidth, theight, _, _ = cctx.text_extents(re.sub(r"\d", "8", time))
-        cctx.move_to(wwidth // 2 - twidth // 2, wheight // 3)
+        cctx.move_to(wwidth // 2 - twidth // 2, wheight // 4)
         draw(time)
 
         # Date
         cctx.select_font_face(
             ctx.font_family, cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_NORMAL
         )
-        cctx.set_font_size(ctx.clock_font_size // 3)
+        cctx.set_font_size(ctx.date_font_size)
         _, _, twidth, theight, _, _ = cctx.text_extents(date)
-        cctx.move_to(wwidth // 2 - twidth // 2, wheight // 3 + theight * 1.5)
+        cctx.move_to(wwidth // 2 - twidth // 2, wheight // 4 + theight * 1.5)
         draw(date)
 
     # Weather
@@ -199,9 +204,20 @@ if __name__ == "__main__":
     ctx = types.SimpleNamespace()
     ctx.background_image = os.getenv("XSECURELOCK_SAVER_IMAGE", None)
     ctx.clock_font_size = int(os.getenv("XSECURELOCK_SAVER_CLOCK_FONT_SIZE", 120))
+    ctx.date_font_size = int(os.getenv("XSECURELOCK_SAVER_DATE_FONT_SIZE", 40))
     ctx.weather_font_size = int(os.getenv("XSECURELOCK_SAVER_WEATHER_FONT_SIZE", 40))
     ctx.weather_file = os.getenv("XSECURELOCK_SAVER_WEATHER", None)
     ctx.font_family = os.getenv("XSECURELOCK_SAVER_FONT", "Iosevka Aile")
+    ctx.font_color = os.getenv("XSECURELOCK_SAVER_FONT_COLOR_RGBA", "1/1/1/0.7").split("/")
+    ctx.font_color_red = float(ctx.font_color[0].strip())
+    ctx.font_color_green = float(ctx.font_color[1].strip())
+    ctx.font_color_blue = float(ctx.font_color[2].strip())
+    ctx.font_color_alpha = float(ctx.font_color[3].strip())
+    ctx.font_shadow_color = os.getenv("XSECURELOCK_SAVER_FONT_SHADOW_COLOR_RGBA", "0/0/0/0.3").split("/")
+    ctx.font_shadow_color_red = float(ctx.font_shadow_color[0].strip())
+    ctx.font_shadow_color_green = float(ctx.font_shadow_color[1].strip())
+    ctx.font_shadow_color_blue = float(ctx.font_shadow_color[2].strip())
+    ctx.font_shadow_color_alpha = float(ctx.font_shadow_color[3].strip())
     ctx.background = None
     ctx.weather = None
     ctx.clock = None
