@@ -68,6 +68,11 @@ case "$(file-type "$file")" in
 		odt2txt --width="$preview_width" "$file" ;;
 	application/pgp-encrypted)
 		gpg -d -- "$file" ;;
+    application/drawio)
+        thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
+        drawio -x "$file" -o "$thumbnail" --width 1920 >/dev/null
+        preview "$thumbnail" "$@"
+        ;;
 	*)
 		mediainfo "$file" ;;
 esac

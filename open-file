@@ -16,6 +16,7 @@ if [ -z "$open_alternative" ]; then
         text/*|application/json) $EDITOR "$file";;
         application/x-sc) sc-im "$file";;
         application/x-freeplane) freeplane-java-11 "$file" ;;
+        application/drawio) devour drawio "$file" ;;
         *) xdg-open "$file" 2>/dev/null & ;;
     esac
 else
