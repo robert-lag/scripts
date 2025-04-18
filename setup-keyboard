@@ -1,17 +1,22 @@
 #!/bin/sh
 # Set keyboard settings
-# - Set layout to at:nodeadkeys
+# - Set layout to at:nodeadkeys and us:algr-intl
+# - Toggle layout with Alt+Shift
 # - Replace comma with dot on numpad
 # - Swap CAPS and ESC keys
 # - Setup key bindings using AltGr
-setxkbmap -layout at \
-	-variant nodeadkeys \
-	-option "kpdl:dot" \
-	-option "caps:swapescape" && \
+setxkbmap -layout us,at \
+    -variant altgr-intl,nodeadkeys \
+    -option "grp:alt_shift_toggle" \
+    -option "kpdl:dot" \
+    -option "caps:swapescape" && \
     xmodmap -e "keycode 28 = t T t T asciitilde" && \
-    xmodmap -e "keycode 38 = a A a A braceleft" && \
-    xmodmap -e "keycode 39 = s S s S braceright" && \
-    xmodmap -e "keycode 40 = d D d D bracketleft" && \
-    xmodmap -e "keycode 41 = f F f F bracketright" && \
-    xmodmap -e "keycode 42 = g G g G backslash" && \
-    xmodmap -e "keycode 56 = b B b B backslash"
+    xmodmap -e "keycode 25 = w W w W odiaeresis Odiaeresis" && \
+    xmodmap -e "keycode 26 = e E e E udiaeresis Udiaeresis" && \
+    xmodmap -e "keycode 94 = less greater less greater bar"
+    #xmodmap -e "keycode 38 = a A a A braceleft" && \
+    #xmodmap -e "keycode 39 = s S s S braceright" && \
+    #xmodmap -e "keycode 40 = d D d D bracketleft" && \
+    #xmodmap -e "keycode 41 = f F f F bracketright" && \
+    #xmodmap -e "keycode 42 = g G g G backslash" && \
+    #xmodmap -e "keycode 56 = b B b B backslash"
