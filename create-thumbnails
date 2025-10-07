@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#IFS=$'\n'
+dir="$*"
+if [ -z "$*" ]; then
+    dir="$PWD";
+fi
+
+for f in $(find $dir -name '*.mp4' -or -name '*.webm'); do
+	cache="$(dirname "$f")/.video-thumbnail-cache"
+	if [ ! -d "$cache" ]; then
+        mkdir "$cache";
+    fi
+
+    thumbnail_name="$cache/$(basename "$f" | sed 's/\..*$/.png/')"
+
+    if [ ! -e "$thumbnail_name" ]; then
+        # Generate a thumbnail with height 1024px
+        ffmpeg -v quiet -y -ss 00:00:00 -i "$f" -vframes 1 -filter:v scale="-1:1024" "$thumbnail_name"
+
+        # Overlay a play-button icon to show that it is a thumbnail and not just an image
+        magick "$thumbnail_name" "/home/robert/.local/bin/assets/play-circle.png" -gravity Center -composite "$thumbnail_name"
+    fi;
+done
+
