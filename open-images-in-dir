@@ -1,11 +1,34 @@
 #!/bin/sh
-# Get all image files, sort them by their modification time (newest first)
-# and show them in nsxiv
+# Get all image files and show them in nsxiv
+# Default: Sorted by their modification time (newest first)
+# -r: Random order
 
-find . -maxdepth 1 -type f \
-    -regextype "posix-extended" \
-    -iregex ".*\.jpg|.*\.jpeg|.*\.png|.*\.webp|.*\.bmp|.*\.tiff|.*\.tif|.*\.raw|.*\.ico|.*\.exif|.*\.heic|.*\.heif|.*\.gif|.*\.avif|.*\.jxl" \
-    -printf "%T+ %p\n" \
-    | sort --reverse \
-    | awk '{print $2}' \
-    | nsxiv --stdin --thumbnail --scale-mode=f --animate --quiet --private
+random_order=false
+
+while getopts "r" o
+do
+    case "$o" in
+        r) random_order=true ;;
+    esac
+done
+
+create-thumbnails
+
+image_files=$(find . -maxdepth 2 -type f \
+        -regextype "posix-extended" \
+        -iregex ".*\.jpg|.*\.jpeg|.*\.png|.*\.webp|.*\.bmp|.*\.tiff|.*\.tif|.*\.raw|.*\.ico|.*\.exif|.*\.heic|.*\.heif|.*\.gif|.*\.avif|.*\.jxl" \
+        -printf "%T+ %p\n")
+
+
+if [ "$random_order" = true ]; then
+    echo "$image_files" \
+        | shuf \
+        | awk '{print $2}' \
+        | nsxiv --stdin --thumbnail --scale-mode=f --animate --quiet --private
+else
+    echo "$image_files" \
+        | sort --reverse \
+        | awk '{print $2}' \
+        | nsxiv --stdin --thumbnail --scale-mode=f --animate --quiet --private
+fi
+
