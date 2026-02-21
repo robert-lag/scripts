@@ -1,0 +1,14 @@
+#!/bin/sh
+
+sudo systemctl enable iwd.service
+sudo systemctl start iwd.service
+
+sudo systemctl enable dhcpcd.service
+sudo systemctl start dhcpcd.service
+
+sudo systemctl disable wpa_supplicant.service
+sudo systemctl stop wpa_supplicant.service
+
+sudo systemctl disable NetworkManager.service
+sudo systemctl stop NetworkManager.service
+
