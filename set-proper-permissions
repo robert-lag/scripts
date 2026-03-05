@@ -1,0 +1,13 @@
+#/bin/sh
+# Sets permissions of folders to 755 and files to 644, which are contained in the folder
+# specified by $1
+
+if [ -z $1 ]; then
+    echo "Usage: set-proper-permissions <path-to-dir>"
+    exit
+fi
+
+
+sudo find "$1" -type d -print0 | sudo xargs -0 chmod 755
+sudo find "$1" -type f -print0 | sudo xargs -0 chmod 644
+

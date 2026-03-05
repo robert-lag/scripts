@@ -60,7 +60,7 @@ case "$(file-type "$file")" in
             mediainfo "$file"
         else
             thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-            gs -o "$thumbnail" -sDEVICE=pngalpha -dLastPage=1 -dUseCropBox "$file" >/dev/null
+            gs -o "$thumbnail" -sDEVICE=png16m -dLastPage=1 -dUseCropBox "$file" >/dev/null
             preview "$thumbnail" "$@"
         fi
 		;;

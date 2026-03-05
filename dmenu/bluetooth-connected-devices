@@ -1,0 +1,17 @@
+#!/bin/sh
+# Returns all connected devices in a list with the following format:
+# <adress> <device-name>
+#
+# Example:
+# 0A:56:56:A4:77:26 My Headphones 1
+# 0A:62:65:E2:28:27 My Headphones 2
+
+echo 'devices Connected' | bluetoothctl |
+    grep -E '^Device\s*[0-9A-F:]+' |
+    awk -F '[[:space:]][[:space:]]*' '/./ {
+        # Skip first column, print others separated by a single space
+        for (i=2; i<NF; i++)
+            printf "%s ", $i
+        print $NF
+    }'
+
