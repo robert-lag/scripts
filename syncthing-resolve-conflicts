@@ -116,7 +116,9 @@ version() {
 cmd() {
     if [[ $findprog = find ]]; then
         if [[ -z $DIRECTORY ]]; then
-            find ~/ -path '~/.local/state/nvim/view' -prune -o -name '*sync-conflict*' -print0
+            # Ignore nvim state directory to exclude swap files and nvim file
+            # histories
+            find ~/ -path "/home/robert/.local/state/nvim" -prune -o -name '*sync-conflict*' -print0
         else
             find "$DIRECTORY" -name '*sync-conflict*' -print0
         fi
