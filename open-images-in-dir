@@ -16,9 +16,8 @@ create-thumbnails
 
 image_files=$(find . -maxdepth 2 -type f \
         -regextype "posix-extended" \
-        -iregex ".*\.jpg|.*\.jpeg|.*\.png|.*\.webp|.*\.bmp|.*\.tiff|.*\.tif|.*\.raw|.*\.ico|.*\.exif|.*\.heic|.*\.heif|.*\.gif|.*\.avif|.*\.jxl" \
+        -iregex ".*\.jpg|.*\.jpeg|.*\.png|.*\.webp|.*\.bmp|.*\.tiff|.*\.tif|.*\.raw|.*\.ico|.*\.exif|.*\.heic|.*\.heif|.*\.gif|.*\.avif|.*\.jxl|.*\.svg" \
         -printf "%T+ %p\n")
-
 
 if [ "$random_order" = true ]; then
     echo "$image_files" \
