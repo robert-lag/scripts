@@ -37,6 +37,7 @@ fi
 
 notify-send --urgency=normal \
     --expire-time=1500 \
+    --replace-id=1001 \
     -i ~/.local/bin/notifications/$icon \
     --hint="string:desktop-entry:brightness-notification" \
     --hint="int:value:${brightness_perc}" \

@@ -5,7 +5,7 @@
 #	If given a file, set that as the new wallpaper.
 #	If given a directory, choose random file in it.
 
-wallpaper_link="${XDG_DATA_HOME:-$HOME/.local/share/}/bg"
+wallpaper_link="${XDG_DATA_HOME:-$HOME/.local/share}/bg"
 new_wallpaper="$(readlink -f "$1")" &&
 
 case "$(file --mime-type -b "$new_wallpaper")" in
