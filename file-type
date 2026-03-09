@@ -7,6 +7,9 @@ file_name="$1"
 file_ext="$(basename "$file_name" | tr '[:upper:]' '[:lower:]')"
 
 case "$file_ext" in
+    *.srt)
+        file_type="application/x-subrip"
+        ;;
     *.tar*)
         file_type="application/x-tar"
         ;;
