@@ -3,6 +3,10 @@
 # https://github.com/slavistan/lf-gadgets
 # Changes were made by Robert Lag.
 
+if [-z "$LF_UEBERZUG_TEMPDIR" ]; then
+    exit
+fi
+
 preview() {
 	cat <<-EOF | paste -sd '' >"$LF_UEBERZUG_TEMPDIR/fifo"
 	{
@@ -17,6 +21,8 @@ lf-ueberzug-cleaner # clean active preview
 
 preview_width="$(($4 - 2))"
 file="$1"; shift
+# Use unique thumbnail name each time as otherwise lf won't refresh the preview
+thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail-$(basename "$file").png"
 
 case "$(file-type "$file")" in
 	text/html)
@@ -33,24 +39,20 @@ case "$(file-type "$file")" in
 	audio/* | application/octet-stream)
 		mediainfo "$file" ;;
 	image/svg+xml)
-		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
 		gm convert "$file" "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
 	image/gif)
-		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
 		gm convert "$file[0]" "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
 	image/heic)
-		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
         heif-thumbnailer "$file" "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
 	image/*)
 		preview "$file" "$@" ;;
 	video/*)
-		thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
 		ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
@@ -59,7 +61,6 @@ case "$(file-type "$file")" in
             printf "\033[0;31m%s\033[0m\n" "*** Password protected ***"
             mediainfo "$file"
         else
-            thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
             gs -o "$thumbnail" -sDEVICE=png16m -dLastPage=1 -dUseCropBox "$file" >/dev/null
             preview "$thumbnail" "$@"
         fi
@@ -69,12 +70,14 @@ case "$(file-type "$file")" in
 	application/pgp-encrypted)
 		gpg -d -- "$file" ;;
     application/drawio)
-        thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail.png"
-        drawio -x "$file" -o "$thumbnail" --width 1920 >/dev/null
+        drawio -x "$file" -o "$thumbnail" --width 960 >/dev/null
         preview "$thumbnail" "$@"
         ;;
 	*)
 		mediainfo "$file" ;;
 esac
+
+# Cleanup thumbnail file
+rm -f "$thumbnail"
 
 return 127 # nonzero retcode required for lf previews to reload
