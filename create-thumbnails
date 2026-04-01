@@ -6,7 +6,7 @@ if [ -z "$*" ]; then
     dir="$PWD";
 fi
 
-for f in $(find $dir -name '*.mp4' -or -name '*.webm'); do
+for f in $(find $dir -name '*.mp4' -or -name '*.m4v' -or -name '*.webm'); do
 	cache="$(dirname "$f")/.video-thumbnail-cache"
 	if [ ! -d "$cache" ]; then
         mkdir "$cache";
