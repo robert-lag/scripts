@@ -389,7 +389,7 @@ if [ ! ${#recursive[@]} -eq 0 ]; then
             break
             ;;
         *)
-            ask "Invalid answer.  Try again: [d/q] "
+            ask "Invalid answer.  Try again: [r/q] "
             continue
             ;;
         esac
