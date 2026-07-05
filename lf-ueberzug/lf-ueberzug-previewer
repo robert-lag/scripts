@@ -21,8 +21,12 @@ lf-ueberzug-cleaner # clean active preview
 
 preview_width="$(($4 - 2))"
 file="$1"; shift
+
+# Cleanup thumbnail files
+rm -f "$LF_UEBERZUG_TEMPDIR"/thumbnail-*.png
+
 # Use unique thumbnail name each time as otherwise lf won't refresh the preview
-thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail-$(basename "$file").png"
+thumbnail="$LF_UEBERZUG_TEMPDIR/thumbnail-$(basename "$file" | sed 's/\./-/g')-$(date +"%Y%m%d%H%M%S").png"
 
 case "$(file-type "$file")" in
 	text/html)
@@ -50,8 +54,18 @@ case "$(file-type "$file")" in
         heif-thumbnailer "$file" "$thumbnail"
 		preview "$thumbnail" "$@"
 		;;
+    image/x-xcf)
+        magick "$file" \
+            -auto-orient \
+            -layers merge \
+            -thumbnail 512x512 \
+            "$thumbnail"
+        preview "$thumbnail" "$@" ;;
 	image/*)
-		preview "$file" "$@" ;;
+        # Currently the preview file name needs to be different for the preview
+        # to update
+        cp "$file" "$thumbnail"
+        preview "$thumbnail" "$@" ;;
 	video/*)
 		ffmpeg -y -i "$file" -vframes 1 "$thumbnail"
 		preview "$thumbnail" "$@"
@@ -76,8 +90,5 @@ case "$(file-type "$file")" in
 	*)
 		mediainfo "$file" ;;
 esac
-
-# Cleanup thumbnail file
-rm -f "$thumbnail"
 
 return 127 # nonzero retcode required for lf previews to reload
