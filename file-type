@@ -92,6 +92,9 @@ case "$file_ext" in
     *.h)
         file_type="text/x-c"
         ;;
+    *.diff)
+        file_type="text/x-diff"
+        ;;
 
     # Custom file types
     *.desktop)
